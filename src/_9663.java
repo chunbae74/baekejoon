@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class _9663 {
-	static int N = 0;
+	static int N;
 	static int count = 0;
 	static int[] arr = new int[15];
 	public static void main(String[] args) throws IOException {
@@ -16,18 +16,20 @@ public class _9663 {
 		System.out.println(count);
 	}
 	
-	public static int nQueen(int n) {
+	public static void nQueen(int depth) {
 		// 끝
-		if (n == N) {
-			return 0;
-		} else {
-			System.out.println(n);
-			n += 1;
-			return nQueen(n);
+		if (depth == N) {
+			return;
+		} 
+		
+		for (int i = 0; i < N; i++) {
+			
+			arr[depth] = i;
+			nQueen(depth + 1);
 		}
 	}
 	
-	public static boolean isRight(int n) {
+	public static boolean isRight(int idx) {
 		
 	}
 
