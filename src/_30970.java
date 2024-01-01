@@ -1,5 +1,3 @@
-package 첫번째나들이;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,7 +11,7 @@ import java.util.StringTokenizer;
  * 1. 품질 높은 순. 만약 같은 품질이면 저렴한 것 우선
  * 2. 가격 낮은 순. 만약 같은 가격이라면 높은 품질 우선
  */
-public class C {
+public class _30970 {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
