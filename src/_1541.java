@@ -12,7 +12,6 @@ public class _1541 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		String s = br.readLine();
-		Queue<String> queue = new LinkedList<>();
 		for (int i = 0; i < s.split("+|-").length; i++) {
 			System.out.println(s.split("+|-")[i]);
 		}
