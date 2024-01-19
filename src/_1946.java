@@ -40,7 +40,7 @@ public class _1946 {
 				// 만약 서류심사 순위도 낮고 면접도 낮다면 탈락
 				if (idx[1] > rank) {
 					continue;
-				}
+				} 
 				
 				rank = idx[1];
 				count ++;
