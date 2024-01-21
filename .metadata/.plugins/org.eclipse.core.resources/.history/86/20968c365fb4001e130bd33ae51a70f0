@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class _12904 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		String s = br.readLine();
+		String t = br.readLine();
+		
+		boolean result = false;
+		
+		while (s.length() <= t.length()) {
+			// 길이가 같다면
+			if (s.length() == t.length()) {
+				// s와 t가 같다면
+				if (s.equals(t)) result = true;
+				break;
+			}
+			
+			// A로 끝난다면 A 삭제
+			if (t.endsWith("A")) {
+				t = t.substring(0, t.length() - 1);
+			}
+			// B로 끝난다면 B 삭제 후 뒤집기
+			else if (t.endsWith("B")) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < t.length() - 1; i++) {
+					char c = t.charAt(i);
+					if (c == 'A') sb.append('B');
+					else if (c == 'B') sb.append('A');
+				}
+				
+				t = sb.toString();
+			}
+		}
+		
+		bw.write((result) ? "1" : "0");
+		bw.flush();
+		bw.close();
+	}
+
+}
