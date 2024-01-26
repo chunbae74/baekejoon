@@ -13,7 +13,7 @@ public class _10039 {
 		for (int i = 0; i < 5; i ++) {
 			int num = Integer.parseInt(br.readLine());
 			sum += (num<40)?40:num;
-		}
+		} 
 		bw.write((sum / 5) + "");
 		bw.flush();
 		bw.close();
