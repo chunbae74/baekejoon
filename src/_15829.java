@@ -17,7 +17,12 @@ public class _15829 {
 		long num = 0;
 		for (int i = 0; i < L; i++) {
 			int n = s.charAt(i) - 'a' + 1;
-			num += (n * Math.pow(31, i)) % M;			
+			long cal = 1;
+			for (int j = 0; j < i; j++) {
+				cal *= 31;
+				cal %= M;
+			}
+			num = ((num % M) + ((n % M) * (cal % M))) % M;			
 		}
 		
 		bw.write(num + "");
