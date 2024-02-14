@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/*
+ * 최소 1
+ */
 public class _2468 {
 	static boolean isDebug = false;
 	static int N;
