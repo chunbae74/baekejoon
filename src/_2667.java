@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /*
- * Input; 0 : 집x / 1 : 집o
+ * Input; 0: 집x / 1: 집o
  */
 public class _2667 {
 	static boolean isDebug = false;
