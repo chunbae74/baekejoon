@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 /*
- * 세로 Y / 가로 X
+ * Y X
  */
 public class _1987 {
 	static boolean isDebug = false;
