@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/*
+ * i = y; j = x
+ * 플로이드-워셜로 다시풀기
+ */
 public class _11403 {
 	static ArrayList<Integer>[] graph;
 	static StringBuilder sb = new StringBuilder();
@@ -30,19 +34,10 @@ public class _11403 {
 				int n = Integer.parseInt(st.nextToken());
 				if (n == 1) {
 					graph[i].add(j);
-					graph[j].add(i);
 				}
 			}
 		}
 		
-		for (int i = 0; i < graph.length; i++) {
-			for (int n: graph[i]) {
-				System.out.print(n + " ");
-			}
-			System.out.println();
-		}
-		
-		System.exit(0);
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				sb.append(bfs(i, j)).append(" ");				
@@ -58,14 +53,15 @@ public class _11403 {
 	public static int bfs(int start, int end) {
 		boolean[] visited = new boolean[N];
 		Queue<Integer> queue = new LinkedList<>();
-		
-		queue.offer(start);
-		visited[start] = true;
+		for (int n: graph[start]) {
+			queue.offer(n);
+			visited[n] = true;
+		}
 		
 		boolean found = false;
 		while (!queue.isEmpty()) {
 			int v = queue.poll();
-			
+
 			if (v == end) {
 				found = true;
 				break;
