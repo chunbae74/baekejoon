@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
  * 같은 수를 여러 번 골라도 된다
  * 고른 수열은 비내림차순이어야한다. (A1 <= A2 <= ... Ak-1 <= Ak)
  * 중복되는 수열 여러 번 출력 X
- */
+ */ 
 public class _15666 {
 	static int N, M;
 	static int[] num;
