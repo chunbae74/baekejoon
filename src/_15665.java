@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 /*
  * N개의 수 중 M개를 고른 수열
  * 같은 수를 여러 번 골라도 됨
- * 중복되는 수열은 X
+ * 중복되는 수열은 X 
  */
 public class _15665 {
 	static int N, M;
