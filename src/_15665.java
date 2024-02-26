@@ -56,6 +56,7 @@ public class _15665 {
 		for (int i = 0; i < N; i++) {
 			// 중복되는 순열 방지
 			if (prev == num[i]) continue;
+			prev = num[i];
 			arr[depth] = num[i];
 			dfs(depth + 1);
 		}

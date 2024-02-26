@@ -52,7 +52,7 @@ public class _15664 {
 		int prev = -1;
 		for (int i = idx; i < N; i++) {
 			if (visited[i] || prev == num[i]) continue;
-
+			prev = num[i];
 			visited[i] = true;
 			arr[depth] = num[i];
 			dfs(i + 1, depth + 1);

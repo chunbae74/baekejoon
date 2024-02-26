@@ -13,6 +13,46 @@ import java.util.StringTokenizer;
  * 플로이드-워셜로 다시풀기
  */
 public class _11403 {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = new StringBuilder();
+		int INF = Integer.MAX_VALUE >> 2;
+		
+		int N = Integer.parseInt(br.readLine());
+		int[][] arr = new int[N][N];
+		
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				int n = Integer.parseInt(st.nextToken());
+				if (n == 1) arr[i][j] = n;
+				else arr[i][j] = INF;
+			}
+		}
+		
+		for (int k = 0; k < N; k++) {			
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					arr[i][j] = Math.min(arr[i][j], arr[i][k] + arr[k][j]);
+				}
+			}
+		}
+
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sb.append((arr[i][j] == INF) ? "0" : "1").append(" ");
+			}
+			sb.append("\n");
+		}
+
+		bw.write(sb.toString());
+		bw.flush();
+		bw.close();
+	}
+}
+/*
+public class _11403 {
 	static ArrayList<Integer>[] graph;
 	static StringBuilder sb = new StringBuilder();
 	 
@@ -77,5 +117,5 @@ public class _11403 {
 		
 		return found ? 1 : 0;
 	}
-
 }
+*/
