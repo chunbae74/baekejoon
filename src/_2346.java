@@ -3,10 +3,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class _2346 {
@@ -15,7 +13,7 @@ public class _2346 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringBuilder sb = new StringBuilder();
-		Deque<int[]> deque = new LinkedList<>();
+		Deque<int[]> deque = new ArrayDeque<>();
 
 		int N = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
