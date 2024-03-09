@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-/*
+/* 
  * 1 X ㅣ정수 X를 스택에 넣는다.
  * 2   ㅣ스택에 정수가 있다면 맨 위의 정수를 빼고 출력, 없으면 -1을 출력한다.
  * 3   ㅣ 스택에 들어있는 정수의 개수를 출력한다
