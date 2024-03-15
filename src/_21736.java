@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-/*
+/* 
  * -1: 벽
  * 0: 빈공간
  * 1: 사람
