@@ -53,10 +53,8 @@ public class _1912 {
 	
 	public static void fiboFor(int n) {
 		for (int i = 1; i < n; i++) {
-			if (dp[i] == null) {
-				dp[i] = Math.max(dp[i - 1], 0) + arr[i];
-				max = Math.max(max, dp[i]);
-			}
+			dp[i] = Math.max(dp[i - 1], 0) + arr[i];
+			max = Math.max(max, dp[i]);
 		}
 	}
 }
