@@ -25,15 +25,31 @@ public class _1932 {
 			}
 		}
 		
-		dp[1][0] = 0;
 		dp[1][1] = arr[1][1];
+		int max = dp[1][1];
+		/*
 		for (int i = 1; i <= N; i++) {
 			recur(N, i);
-		}
-		
-		int max = dp[N][1];
-		for (int i = 2; i <= N; i++) {
 			max = Math.max(max, dp[N][i]);
+		}
+		*/
+		for (int n = 2; n <= N; n++) {
+			for (int idx = 1; idx <= n; idx++) {
+				if (idx == 1) {
+					dp[n][idx] = dp[n - 1][idx] + arr[n][idx];
+				}
+				else if (idx == n) {
+					dp[n][idx] = dp[n - 1][idx - 1] + arr[n][idx];
+				}
+				else {
+					dp[n][idx] = Math.max(dp[n - 1][idx - 1], dp[n - 1][idx]) + arr[n][idx];
+				}
+				
+				if (n == N) {
+					max = Math.max(max, dp[n][idx]);
+				}
+			}
+			
 		}
 		
 		bw.write(max + "");
