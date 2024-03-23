@@ -8,6 +8,8 @@ import java.util.StringTokenizer;
 
 /*
  * 그냥 퇴사 안하면 안되냐 백준아;;;;
+ * 해설: https://velog.io/@yoonuk/%EB%B0%B1%EC%A4%80-14501-%ED%87%B4%EC%82%AC-Java%EC%9E%90%EB%B0%94
+ * 24.03.23 해설 확인
  */
 public class _14501 {
 	// 상담시간, 금액
@@ -32,20 +34,6 @@ public class _14501 {
 				max = Math.max(max, i);
 			}
 		}
-		
-		dp[0] = 0;
-		dp[1] = arr[1][1];
-		
-		if (N > 1) {
-			if (arr[1][0] < 2) {
-				dp[2] = arr[1][0] + arr[2][0];
-			}
-			else {
-				dp[2] = arr[2][1];
-			}
-		}
-		
-		recur(max);
 		
 		System.out.println(Arrays.toString(dp));
 		bw.write(dp[max] + "");
