@@ -3,50 +3,49 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/*
+ * 반례모음: https://www.acmicpc.net/board/view/114371
+ */
+/*
+ * 75580088ㅣTop-Down
+ * 75580353ㅣBottom-Up
+ */
 public class _11053 {
 	static int[] arr;
-	static Integer[][] dp;
-	static int maxLen;
+	static Integer[] dp;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		int N = Integer.parseInt(br.readLine());
 		
-		arr = new int[N];
-		dp = new Integer[N][2];
+		arr = new int[N + 1];
+		// N번째 자리에 도달하는 최대 경우의 수 저장
+		dp = new Integer[N + 1];
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
+		for (int i = 1; i <= N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		dp[0] = new Integer[] { arr[0], 1 };
-		maxLen = 1;
+		dp[1] = 1;
 		
-		fiboFor(N - 1);
+		int max = 1;
+		for (int n = 2; n <= N; n++) {
+			dp[n] = 1;
+			for (int i = 1; i < n; i++) {
+				if (arr[i] < arr[n]) {
+					dp[n] = Math.max(dp[n], dp[i] + 1);
+				}
+			}
+			max = Math.max(max, dp[n]);
+		}
 		
-		System.out.println(Arrays.deepToString(dp));
-		bw.write(maxLen + "");
+		bw.write(max + "");
 		bw.flush();
 		bw.close();
 		br.close();
 	}
-	
-	public static void fiboFor(int n) {
-		for (int i = 1; i < n; i++) {
-			if (arr[i] > dp[i - 1][0]) {
-				int len = dp[i - 1][1] + 1;
-				dp[i] = new Integer[] { arr[i], len };
-				maxLen = Math.max(len, maxLen);
-			}
-			else {
-				dp[i] = new Integer[] { arr[i], 1 };
-			}
-		}
-	}
-
 }
