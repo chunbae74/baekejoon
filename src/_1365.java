@@ -5,12 +5,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-/*
- * LIS 알고리즘 설명: https://sskl660.tistory.com/89
- */
-public class _12015 {
+public class _1365 {
 	static int[] arr;
 	static Integer[] dp;
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -30,23 +28,22 @@ public class _12015 {
 			
 			if (index == -1) {
 				dp[LIS++] = nowNum;
-			}
-			else {
+			} else {
 				dp[index] = nowNum;
 			}
 		}
 		
-		bw.write(LIS + "");
+		bw.write((N - LIS) + "");
 		bw.flush();
 		bw.close();
 		br.close();
-		
 	}
 	
 	public static int binarySearch(int num, int start, int end) {
 		int res = 0;
 		while (start <= end) {
 			int mid = (start + end) / 2;
+			
 			if (dp[mid] == null) {
 				return -1;
 			}
@@ -61,4 +58,5 @@ public class _12015 {
 		
 		return res;
 	}
+
 }
