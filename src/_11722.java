@@ -6,33 +6,56 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class _11722 {
-
+	static Integer[] dp;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
 		int N = Integer.parseInt(br.readLine());
 		int[] arr = new int[N];
-		Integer[] dp = new Integer[N];
+		dp = new Integer[N];
 
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int max = -1;
 		for (int i = 0; i < N; i++) {
 			int num = Integer.parseInt(st.nextToken());
 			arr[i] = num;
-			dp[i] = 1;
-			for (int j = 0; j < i; j++) {
-				if (arr[j] > num) {
-					dp[i] = Math.max(dp[i], dp[j] + 1);
-				}
-			}
-			max = Math.max(max, dp[i]);
 		}
 		
-		bw.write(max + "");
+		int LIS = 0;
+		for (int i = N - 1; i >= 0; i--) {
+			int num = arr[i];
+			if (i == N - 1) {
+				dp[LIS++] = num;
+				continue;
+			}
+			
+			if (dp[LIS - 1] < num) {
+				dp[LIS++] = num;
+			} else {
+				int index = binarySearch(num, 0, LIS);
+				dp[index] = num;
+			}
+		}
+		
+		bw.write(LIS + "");
 		bw.flush();
 		bw.close();
 		br.close();
 				
 	}
-
+	
+	public static int binarySearch(int num, int start, int end) {
+		int res = 0;
+		while (start <= end) {
+			int mid = (start + end) / 2;
+			if (dp[mid] < num) {
+				start = mid + 1;
+			} else {
+				res = mid;
+				end = mid - 1;
+			}
+		}
+		
+		return res;
+	}
 }
