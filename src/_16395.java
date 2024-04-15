@@ -17,7 +17,7 @@ public class _16395 {
 		Integer[][] dp = new Integer[N][];
 		
 		dp[0] = new Integer[] { 1 };
-		dp[1] = new Integer[] { 1, 1 };
+		if (N > 1) dp[1] = new Integer[] { 1, 1 };
 		for (int i = 2; i < N; i++) {
 			dp[i] = new Integer[i + 1];
 			for (int j = 0; j < (i + 1); j++) {
