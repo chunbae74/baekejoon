@@ -29,25 +29,36 @@ public class _12852 {
 		}
 		
 		for (int i = 4; i <= N; i++) {
-			if ((i % 3) == 0) {
-				if (dp[i / 3] < dp[i - 1]) {
-					dp[i] = dp[i / 3] +  1;
+			if ((i % 6) == 0) {
+				int res = Math.min(dp[i / 2], Math.min(dp[i / 3], dp[i - 1]));
+				dp[i] = res + 1;
+				if (res == dp[i / 2]) {
+					idxArr[i] = i / 2;
+				} else if (res == dp[i / 3]) {
+					idxArr[i] = i / 3;
+				} else if (res == dp[i - 1]) {
+					idxArr[i] = i - 1;
+				}
+			}
+			else if ((i % 3) == 0) {
+				int res = Math.min(dp[i / 3], dp[i - 1]);
+				dp[i] = res + 1;
+				if (res == dp[i / 3]) {
 					idxArr[i] = i / 3;
 				} else {
-					dp[i] = dp[i - 1] + 1;
 					idxArr[i] = i - 1;
 				}
 			}
-			if ((i % 2) == 0) {
-				if (dp[i / 2] < dp[i - 1]) {
-					dp[i] = dp[i / 2] + 1;
+			else if ((i % 2) == 0) {
+				int res = Math.min(dp[i / 2], dp[i - 1]);
+				dp[i] = res + 1;
+				if (res == dp[i / 2]) {
 					idxArr[i] = i / 2;
 				} else {
-					dp[i] = dp[i - 1] + 1;
 					idxArr[i] = i - 1;
 				}
 			}
-			if ((i % 3) != 0 && (i % 2) != 0) {
+			else {
 				dp[i] = dp[i - 1] + 1;
 				idxArr[i] = i - 1;
 			}
