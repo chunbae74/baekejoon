@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class _10973 {
@@ -53,19 +52,9 @@ public class _10973 {
 				sb.append(max).append(" ");
 				
 				// i - 1 뒤의 수들은 내림차순으로 재정렬
-				int[] order = new int[N];
-				int idx = 0;
-				// 사용하지 않은 수들을 order배열에 넣기
-				for (int k = 1; k <= N; k++) {
+				for (int k = N; k > 0; k--) {
 					if (isUsed[k]) continue;
-					order[idx++] = k;
-				}
-				
-				Arrays.sort(order);
-				
-				for (int k = order.length - 1; k >= 0; k--) {
-					if (order[k] == 0) continue;
-					sb.append(order[k]).append(" ");
+					sb.append(k).append(" ");
 				}
 				break;
 			} 
