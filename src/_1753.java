@@ -34,9 +34,11 @@ public class _1753 {
 		int K = Integer.parseInt(br.readLine());
 		
 		// 그래프 정보를 저장할 배열
-		ArrayList[] al = new ArrayList[V + 1];
+		ArrayList<Node_1753>[] al = new ArrayList[V + 1];
 		// 최단거리를 저장할 배열
 		int[] dp = new int[V + 1];
+		// 방문여부
+		boolean[] visited = new boolean[V + 1];
 		
 		for (int i = 0; i <= V; i++) {
 			al[i] = new ArrayList<Node_1753>();
@@ -63,25 +65,27 @@ public class _1753 {
 		pQ.offer(new Node_1753(K, dp[K]));
 		
 		while (!pQ.isEmpty()) {
-			// nowNode까지는 최단거리가 구해짐. (dp[nowNode]값이 존재함)
 			int nowNode = pQ.peek().nextNode;
-			int nowCost = pQ.peek().cost;
 			pQ.poll();
-			
-			if (dp[nowNode] < nowCost) {
+
+			// 이미 방문했으면 건너뛰기
+			if (visited[nowNode]) {
 				continue;
 			}
+
+			// 지금 노드 방문처리 해주기
+			visited[nowNode] = true;
 			
 			// 인접 노드들 update
-			for (int i = 0; i < al[nowNode].size(); i++) {
-				Node_1753 nextV = (Node_1753) al[nowNode].get(i);
+			for (Node_1753 nextV: al[nowNode]) {
 				int nextNode = nextV.nextNode;
+				// nowNode에서 nextNode까지 가는 데 필요한 비용
 				int nextCost = nextV.cost;
 				
-				// nowCost: 출발지부터 nowNode까지 오는 데 필요한 비용
-				// nextCost: nowNode에서 nextNode까지 가는 데 필요한 비용
-				if (dp[nextNode] > nowCost + nextCost) {
-					dp[nextNode] = nowCost + nextCost;
+				// 기존에 저장된 출발지->nextNode 비용보다
+				// 출발지->nowNode + nowNode->nextNode 비용이 더 적다면
+				if (dp[nextNode] > dp[nowNode] + nextCost) {
+					dp[nextNode] = dp[nowNode] + nextCost;
 					pQ.offer(new Node_1753(nextNode, dp[nextNode]));
 				}
 			}
