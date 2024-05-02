@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-class Spot {
+class Spot_2178 {
    int x, y;
    
-   public Spot(int x, int y) {
+   public Spot_2178(int x, int y) {
       this.x = x;
       this.y = y;
    }
@@ -52,11 +52,11 @@ public class _2178 {
    
    
    public static void bfs(int x, int y) {
-      Queue<Spot> queue = new LinkedList<>();
-      queue.offer(new Spot(x, y));
+      Queue<Spot_2178> queue = new LinkedList<>();
+      queue.offer(new Spot_2178(x, y));
 
       while (!queue.isEmpty()) {
-         Spot s = queue.poll();
+         Spot_2178 s = queue.poll();
          int nowX = s.x;
          int nowY = s.y;
          
@@ -70,7 +70,7 @@ public class _2178 {
             arr[Y][X] = arr[nowY][nowX] + 1;
             visited[Y][X] = true;
             
-            queue.offer(new Spot(X, Y));
+            queue.offer(new Spot_2178(X, Y));
          }
       }
    }
