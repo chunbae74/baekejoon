@@ -29,8 +29,8 @@ class Node_1504 {
 public class _1504 {
 	static int N, E;
 	static int[] dist;
-	static boolean[] visited;
 	static int[] result;
+	static boolean[] isNotPossible = new boolean[2];
 	static ArrayList<Node_1504>[] graph;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -41,11 +41,9 @@ public class _1504 {
 		
 		graph = new ArrayList[N + 1];
 		dist = new int[N + 1];
-		visited = new boolean[N + 1];
 		result = new int[2];
 		
 		for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
 			graph[i] = new ArrayList<>();
 		}
 		
@@ -55,6 +53,7 @@ public class _1504 {
 			int e = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
 			graph[s].add(new Node_1504(e, c));
+			graph[e].add(new Node_1504(s, c));
 		}
 		
 		st = new StringTokenizer(br.readLine());
@@ -62,183 +61,41 @@ public class _1504 {
 		int v2 = Integer.parseInt(st.nextToken());
 		
 		// Case1) "1 -> v1" -> v2 -> N
-		PriorityQueue<Node_1504> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
-		dist[1] = 0;
-		pq.offer(new Node_1504(1, dist[1]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == v1) {
-				result[0] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
+		result[0] += dijkstra(1, v1, 0);
 		
 		// Case1) 1 -> "v1 -> v2" -> N
-		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[v1] = 0;
-		pq.offer(new Node_1504(v1, dist[v1]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == v2) {
-				result[0] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
+		if (!isNotPossible[0]) result[0] += dijkstra(v1, v2, 0);
 		
 		// Case1) 1 -> v1 -> "v2 -> N"
-		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
-		for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[v2] = 0;
-		pq.offer(new Node_1504(v2, dist[v2]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == N) {
-				result[0] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
+		if (!isNotPossible[0]) result[0] += dijkstra(v2, N, 0);
+
 		
 		// Case2) "1 -> v2" -> v1 -> N
-		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));dist[1] = 0;
-		for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[1] = 0;
-		pq.offer(new Node_1504(1, dist[1]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == v2) {
-				result[1] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
+		result[1] += dijkstra(1, v2, 1);
 		
 		// Case2) 1 -> "v2 -> v1" -> N
-		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
-		for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[v2] = 0;
-		pq.offer(new Node_1504(v2, dist[v2]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == v1) {
-				result[1] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
+		if (!isNotPossible[1]) result[1] += dijkstra(v2, v1, 1);
 		
 		// Case2) 1 -> v2 -> "v1 -> N"
-		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
-		for (int i = 0; i <= N; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[v1] = 0;
-		pq.offer(new Node_1504(v1, dist[v1]));
-		while (!pq.isEmpty()) {
-			int nowV = pq.peek().index;
-			int nowC = pq.peek().cost;
-			pq.poll();
-			
-			if (dist[nowV] < nowC) continue;
-			
-			if (nowV == N) {
-				result[1] += dist[nowV];
-				break;
-			}
-			
-			for (Node_1504 nextNode: graph[nowV]) {
-				int nextV = nextNode.index;
-				if (dist[nextV] > dist[nowV] + nextNode.cost) {
-					dist[nextV] = dist[nowV] + nextNode.cost;
-					pq.offer(new Node_1504(nextV, dist[nextV]));
-				}
-			}
-		}
-
-		if (result[0] == 0 && result[1] == 0) {
+		if (!isNotPossible[1]) result[1] += dijkstra(v1, N, 1);
+		
+		// print
+		if (isNotPossible[0] && isNotPossible[1]) {
 			bw.write("-1");
+		} else if (isNotPossible[0]) {
+			bw.write(result[1] + "");
+		} else if (isNotPossible[1]) {
+			bw.write(result[0] + "");
 		} else {
-			int n1 = Math.min(result[0], result[1]);
-			int n2 = Math.max(result[0], result[1]);
-			if (n1 == 0) bw.write(n2 + "");
-			else bw.write(n1 + "");
+			bw.write(Math.min(result[0], result[1]) + "");
 		}
+		
 		bw.flush();
 		bw.close();
 		br.close();
 	}
 	
-	public static void dijkstra(int start, int end) {
+	public static int dijkstra(int start, int end, int type) {
 		PriorityQueue<Node_1504> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
 		for (int i = 0; i <= N; i++) {
 			dist[i] = Integer.MAX_VALUE;
@@ -246,15 +103,16 @@ public class _1504 {
 		dist[start] = 0;
 		pq.offer(new Node_1504(start, dist[start]));
 		while (!pq.isEmpty()) {
-			int nowV = pq.poll().index;
+			int nowV = pq.peek().index;
+			int nowC = pq.peek().cost;
+			pq.poll();
 			
-			if (visited[nowV]) continue;
+			if (dist[nowV] < nowC) continue;
 			
-			if (nowV == N) {
+			if (nowV == end) {
 				break;
 			}
 			
-			visited[nowV] = true;
 			for (Node_1504 nextNode: graph[nowV]) {
 				int nextV = nextNode.index;
 				if (dist[nextV] > dist[nowV] + nextNode.cost) {
@@ -263,5 +121,11 @@ public class _1504 {
 				}
 			}
 		}
+		
+		if (dist[end] == Integer.MAX_VALUE) {
+			isNotPossible[type] = true;
+			return -1;
+		}
+		else return Math.max(0, dist[end]);
 	}
 }
