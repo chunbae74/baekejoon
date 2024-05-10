@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  */
 public class _1325 {
 	static int N, M;
-	static ArrayList<Integer>[] al;
+	static LinkedList<Integer>[] al;
 	static int[] result;
 	static boolean[] visited;
 	
@@ -28,11 +28,11 @@ public class _1325 {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		
-		al = new ArrayList[N];
+		al = new LinkedList[N];
 		result = new int[N];
 		
 		for (int i = 0; i < N; i++) {
-			al[i] = new ArrayList<>();
+			al[i] = new LinkedList<>();
 		}
 		
 		for (int i = 0; i < M; i++) {
