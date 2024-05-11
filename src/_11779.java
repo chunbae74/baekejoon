@@ -26,11 +26,12 @@ public class _11779 {
 		int M = Integer.parseInt(br.readLine());
 		
 		ArrayList<Node_11779>[] graph = new ArrayList[N + 1];
+		ArrayList<Integer>[] record = new ArrayList[N + 1];
 		int[] dist = new int[N + 1];
-		int[] arr = new int[N + 3];
-		
+	
 		for (int i = 0; i <= N; i++) {
 			graph[i] = new ArrayList<>();
+			record[i] = new ArrayList<>();
 			dist[i] = Integer.MAX_VALUE;
 		}
 
@@ -47,18 +48,14 @@ public class _11779 {
 		int END = Integer.parseInt(st.nextToken());
 		
 		dist[START] = 0;
-		arr[0] = START;
-		arr[1] = dist[START];
-		arr[2] = 1;
-		arr[3] = START;
-		PriorityQueue<int[]> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1[1], e2[1]));
-		pq.offer(arr);
+		record[START].add(START);
+		PriorityQueue<Node_11779> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
+		pq.offer(new Node_11779(START, dist[START]));
 		
 		while (!pq.isEmpty()) {
-			int nowV = pq.peek()[0];
-			int nowCost = pq.peek()[1];
-			int size = pq.peek()[2];
-			arr = pq.poll();
+			int nowV = pq.peek().index;
+			int nowCost = pq.peek().cost;
+			pq.poll();
 			
 			if (dist[nowV] < nowCost) continue;
 			
@@ -69,19 +66,21 @@ public class _11779 {
 				int nextCost = nextNode.cost;
 				if (dist[nextV] > dist[nowV] + nextCost) {
 					dist[nextV] = dist[nowV] + nextCost;
-					arr[0] = nextV;
-					arr[1] = dist[nextV];
-					arr[arr[2] + 2] = nextV;
-					arr[2]++;
-					pq.offer(arr);
+					pq.offer(new Node_11779(nextV, dist[nextV]));
+					
+					record[nextV] = new ArrayList<>();
+					for (int num: record[nowV]) {
+						record[nextV].add(num);
+					}
+					record[nextV].add(nextV);
 				}
 			}
 		}
 		
 		sb.append(dist[END]).append("\n");
-		sb.append((arr[2] - 1)).append("\n");
-		for (int i = 3; i < (arr[2] + 3); i++) {
-			sb.append(arr[i]).append(" ");
+		sb.append(record[END].size()).append("\n");
+		for (int num: record[END]) {
+			sb.append(num).append(" ");
 		}
 		
 		bw.write(sb.toString());
