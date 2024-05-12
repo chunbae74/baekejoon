@@ -3,21 +3,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.StringTokenizer;
 
 /*
  * V: 마을의 개수 (정점의 개수)
- * E: 도 로의 개수 (간선의 개수)
+ * E: 도로의 개수 (간선의 개수)
  */
 public class _1956 {
-	static int[][] arr;
-	static boolean[] visited;
-	static int INF = Integer.MAX_VALUE >> 2;
-	static ArrayList<Integer>[] al;
-	static int[] result;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -25,16 +17,15 @@ public class _1956 {
 		
 		int V = Integer.parseInt(st.nextToken());
 		int E = Integer.parseInt(st.nextToken());
-		arr = new int[V][V];
-		al = new ArrayList[V];
-		result = new int[V];
+
+		final long INF = 987654321;
+		long[][] dist = new long[V][V];
 		
 		for (int i = 0; i < V;i ++) {
 			for (int j = 0; j < V; j++) {
-				arr[i][j] = INF;
+				if (i == j) dist[i][j] = 0;
+				else dist[i][j] = INF;
 			}
-			al[i] = new ArrayList<>();
-			result[i] = INF;
 		}
 		
 		for (int i = 0; i < E; i++) {
@@ -42,50 +33,34 @@ public class _1956 {
 			int a = Integer.parseInt(st.nextToken()) - 1;
 			int b = Integer.parseInt(st.nextToken()) - 1;
 			int cost = Integer.parseInt(st.nextToken());
-			arr[a][b] = cost;
-			al[a].add(b);
+			dist[a][b] = cost;
 		}
 		
 		for (int k = 0; k < V; k++) {
 			for (int i = 0; i < V; i++) {
 				for (int j = 0; j < V; j++) {
-					arr[i][j] = Math.min(arr[i][j], arr[i][k] + arr[k][j]);
+					dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
 				}
 			}
 		}
 		
-		
+		long min = Long.MAX_VALUE;
+		/*
+		 * i: 출발지
+		 * j: 중간지점
+		 */
 		for (int i = 0; i < V; i++) {
-			visited = new boolean[V];
-			Collections.sort(al[i]);
-			dfs(i, i, 0);
+			for (int j = 0; j < V; j++) {
+				if (i == j) continue;
+				if (dist[i][j] == INF || dist[j][i] == INF) continue;
+				min = Math.min(min, dist[i][j] + dist[j][i]);
+			}
 		}
-		
-		Arrays.sort(result);
-		bw.write((result[0] == INF) ? "-1" : (result[0] + ""));
+	
+		bw.write((min == Long.MAX_VALUE) ? "-1" : (min + ""));
 		bw.flush();
 		bw.close();
-	}
-	
-	public static void dfs(int start, int now, int sum) {
-		for (int n: al[now]) {
-			
-			// 이미 방문한 도시라면 건너뛰기
-			if (visited[n]) continue;
-			
-			sum += arr[now][n];
-			
-			// System.out.printf("start = %d\tnow = %d\tn = %d\tsum = %d\tcost = %d\n", start, now, n, sum, arr[now][n]);
-			// 시작지점으로 되돌아왔다면
-			if (n == start) {
-				result[start] = Math.min(result[start], sum);
-				return;
-			}
-			
-			visited[n] = true;
-			dfs(start, n, sum);
-		}
-		
+		br.close();
 	}
 	
 }
