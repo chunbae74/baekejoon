@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -39,16 +40,17 @@ public class _11780 {
 		}
 		
 		for (int k = 0; k < N; k++) {
-			for (int i = 0; i < N; i++) {
+			for (int i = 1; i < 2; i++) {
 				for (int j = 0; j < N; j++) {
 					if (dist[i][j] > dist[i][k] + dist[k][j]) {
 						dist[i][j] = dist[i][k] + dist[k][j];
 						preIdx[i][j] = k;
+						System.out.println(i + " " + j + " " + k + " " + Arrays.toString(preIdx[i]));
 					}
 				}
 			}
 		}
-		
+		/*
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				System.out.print(preIdx[i][j]+ 1 + " ");
@@ -86,7 +88,7 @@ public class _11780 {
 				}
 			}
 		}
-		
+		*/
 		bw.write(sb.toString());
 		bw.flush();
 		bw.close();

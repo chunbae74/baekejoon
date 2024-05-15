@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /*
@@ -15,16 +16,17 @@ public class _2458 {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int INF = Integer.MAX_VALUE >> 2;
+		final int INF = Integer.MAX_VALUE >> 2;
 		
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		int[][] arr = new int[N][N];
+		int[][] dist = new int[N][N];
 		
 		for (int i = 0; i < N;i ++) {
 			for (int j = 0; j < N; j++) {
-				arr[i][j] = INF;
+				if (i == j) continue;
+				else dist[i][j] = INF;
 			}
 		}
 		
@@ -32,23 +34,37 @@ public class _2458 {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken()) - 1;
 			int b = Integer.parseInt(st.nextToken()) - 1;
-			arr[a][b] = 1;
+			dist[a][b] = 1;
 		}
 		
 		for (int k = 0; k < N; k++) {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					arr[i][j] = Math.min(arr[i][j], arr[i][k] + arr[k][j]);
+					dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
 				}
 			}
 		}
 		
+		int[] count = new int[N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				System.out.print(arr[i][j] + " ");
+				if (i == j) continue;
+				// i와 j의 비교가 불가능한 경우.
+				if (dist[i][j] == INF) continue;
+				count[j] ++;
+				count[i] ++;
 			}
-			System.out.println();
 		}
+		
+		int result = 0;
+		for (int i = 0; i < N; i++) {
+			if (count[i] == N - 1) result ++;
+		}
+		
+		bw.write(result + "");
+		bw.flush();
+		bw.close();
+		br.close();
 	}
 
 }
