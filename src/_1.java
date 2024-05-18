@@ -1,43 +1,47 @@
-/*
- * 출처: https://hyoje420.tistory.com/14
- */
-class overloadingMethods {
-	public void print() {
-		System.out.println("오버로딩1");
-	}
-	
-	String print(Integer a) {
-		System.out.println("오버로딩2");
-		return a.toString();
-	}
-	
-	void print(Integer a) {
-		System.out.println("오버로딩3");
-	}
-	
-	String print(Integer a, Integer b) {
-		System.out.println("오버로딩4");
-		return a.toString() + b.toString();
-	}
-}
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class _1 {
 
-   public static void main(String[] args) {
-      overloadingMethods om = new overloadingMethods();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        int N = Integer.parseInt(st.nextToken());
+		String originName = st.nextToken();
       
-      // 메소드1
-      om.print();
-      
-      // 메소드2
-      System.out.println(om.print(3));
-      
-      // 메소드3
-      om.print("Hello World!");
-      
-      // 메소드4
-      System.out.println(om.print(4, 5));
-   }
-  
-   
+		boolean[] arr = new boolean[26];
+        int count = originName.length();
+        
+        // step 1
+		for (int i = 0; i < originName.length(); i++) {
+			char c = originName.charAt(i);
+            if (!arr[c - 'a']) {
+                sb.append(c);
+                arr[c - 'a'] = true;
+                count --;
+            }
+        }
+		
+		// step 2
+        sb.append(count + 4);
+        // step 3
+        sb.insert(0, N + 1906);
+        // step 4
+        sb = sb.reverse();
+        // step 5
+        sb.insert(0, "smupc_");
+		
+        bw.write(sb.toString());
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+
 }
