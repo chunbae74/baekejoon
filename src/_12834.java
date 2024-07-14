@@ -16,7 +16,7 @@ class Node_12834 {
 }
 
 public class _12834 {
-	static final int INF = Integer.MAX_VALUE;
+	static final int INF = Integer.MAX_VALUE >> 1;
 	static int N, V, E;
 	static int KIST, CRFOOD;
 	static ArrayList<Node_12834>[] graph;
@@ -29,7 +29,7 @@ public class _12834 {
 		V = Integer.parseInt(st.nextToken());
 		E = Integer.parseInt(st.nextToken());
 		
-		boolean[] isTeam = new boolean[V];
+		int[] starts = new int[N];
 		graph = new ArrayList[V];
 		
 		for (int v = 0; v < V; v++) {
@@ -42,8 +42,7 @@ public class _12834 {
 		
 		st = new StringTokenizer(br.readLine());
 		for (int n = 0; n < N; n++) {
-			int num = Integer.parseInt(st.nextToken()) - 1;
-			isTeam[num] = true;
+			starts[n] = Integer.parseInt(st.nextToken()) - 1;
 		}
 		
 		for (int e = 0; e < E; e++) {
@@ -55,16 +54,15 @@ public class _12834 {
 			graph[B].add(new Node_12834(A, C));
 		}
 		
-		int sum = 0;
-		for (int i = 0; i < V; i++) {
-			if (!isTeam[i]) continue;
-			sum += dikjstra(i);
+		long sum = 0;
+		for (int s: starts) {
+			sum += dikjstra(s);
 		}
 		
 		System.out.println(sum);
 	}
 	
-	public static int dikjstra(int start) {
+	public static long dikjstra(int start) {
 		PriorityQueue<Node_12834> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
 		int[] dist = new int[V];
 		for (int i = 0; i < V; i++) {
