@@ -10,8 +10,8 @@ public class _6841 {
 		StringBuilder sb = new StringBuilder();
 		HashMap<String, String> hs = new HashMap<>();
 		hs.put("CU", "see you");
-		hs.put(":-)", "I'm happy");
-		hs.put(":-(", "I'm unhappy");
+		hs.put(":-)", "I’m happy");
+		hs.put(":-(", "I’m unhappy");
 		hs.put(";-)", "wink");
 		hs.put(":-P", "stick out my tongue");
 		hs.put("(~.~)", "sleepy");
@@ -19,12 +19,12 @@ public class _6841 {
 		hs.put("CCC", "Canadian Computing Competition");
 		hs.put("CUZ", "because");
 		hs.put("TY", "thank-you");
-		hs.put("YW", "you're welcome");
+		hs.put("YW", "you’re welcome");
 		hs.put("TTYL", "talk to you later");
 		
 		while (true) {
-			String input = br.readLine().toUpperCase();
-			sb.append(hs.containsKey(input) ? hs.get(input) : input).append("\n");
+			String input = br.readLine();
+			sb.append(hs.containsKey(input.toUpperCase()) ? hs.get(input.toUpperCase()) : input).append("\n");
 			if (input.equals("TTYL")) break;
 		}
 		
