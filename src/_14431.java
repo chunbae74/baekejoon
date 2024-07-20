@@ -27,9 +27,9 @@ public class _14431 {
 		isNotSosu[0] = isNotSosu[1] = true;
 		
 		for (int i = 2; i <= Math.sqrt(8_500); i++) {
-			if (!isNotSosu[i]) continue;
+			if (isNotSosu[i]) continue;
 			
-			for (int j = i * i; j <= 8_500; j += i) {
+			for (int j = i * i; j < 8_500; j += i) {
 				isNotSosu[j] = true;
 			}
 		}
@@ -56,14 +56,13 @@ public class _14431 {
 		
 		int[][] graph = new int[N + 2][N + 2];
 		for (int i = 0; i < N + 2; i++) {
-			for (int j = 0; j < N + 2; j++) {
-				if (i == j) continue;
+			for (int j = i + 1; j < N + 2; j++) {
 				if (graph[i][j] != 0 || graph[j][i] != 0) continue;
 
 				int cal = (int) (Math.sqrt(Math.pow(cor[i][0] - cor[j][0], 2) + Math.pow(cor[i][1] - cor[j][1], 2)));
 				// 거리가 소수가 아닐 경우
 				if (isNotSosu[cal]) {
-					graph[i][j] = -1;
+					graph[i][j] = graph[j][i] = -1;
 					continue;
 				}
 				
@@ -102,7 +101,6 @@ public class _14431 {
 			}
 		}
 		
-		System.out.println(Arrays.toString(dist));
 		System.out.println(dist[N + 1] == INF ? -1 : dist[N + 1]);
 	}
 
