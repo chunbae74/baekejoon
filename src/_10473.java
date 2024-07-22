@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -24,9 +22,11 @@ public class _10473 {
 		// 대포의 개수
 		int N = Integer.parseInt(br.readLine());
 		
-		double[][] cordinate = new double[N][2];
+		double[][] cordinate = new double[N + 2][2];
 		
-		for (int n = 0; n < N; n++) {
+		cordinate[0] = new double[] { startX, startY };
+		cordinate[N + 1] = new double[] { endX, endY };
+		for (int n = 1; n <= N; n++) {
 			st = new StringTokenizer(br.readLine());
 			double x = Double.parseDouble(st.nextToken());
 			double y = Double.parseDouble(st.nextToken());
@@ -36,73 +36,21 @@ public class _10473 {
 		double[] dist = new double[N + 2];
 		double[][] graph = new double[N + 2][N + 2];
 		
+		// 노드별 거리 계산
 		for (int y = 0; y < N + 2; y++ ) {
 			dist[y] = INF;
 			
 			for (int x = 0; x < N + 2; x++) {
-				// a->대포
-				if (y == 0) {
-					// a -> a (제자리)
-					if (x == 0) graph[y][x] = 0;
-					// a -> b (걸어서만)
-					else if (x == N + 1) {
-						graph[y][x] = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY- endY, 2)) / 5;
-					}
-					// a -> 대포 (걸어서만)
-					else {
-						double cannonX = cordinate[x - 1][0];
-						double cannonY = cordinate[x - 1][0];
-						graph[y][x] = Math.sqrt(Math.pow(startX - cannonX, 2) + Math.pow(startY - cannonY, 2));
-					}
-				}
-				// b->대포
-				else if (y == N + 1) {
-					// b -> b (제자리)
-					if (x == N + 1) continue;
-					// b -> a (걸어서만)
-					else if (x == 0) {
-						graph[y][x] = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY- endY, 2)) / 5;
-					}
-					// b -> 대포 (걸어서만)
-					else {
-						double cannonX = cordinate[x - 1][0];
-						double cannonY = cordinate[x - 1][0];
-						graph[y][x] = Math.sqrt(Math.pow(endX - cannonX, 2) + Math.pow(endY - cannonY, 2));
-					}
-				}
-				// 대포
+				if (x == y) graph[x][y] = graph[y][x] = 0;
 				else {
-					double nowX = cordinate[y - 1][0];
-					double nowY = cordinate[y - 1][1];
-					double tarX, tarY;
-					
-					if (x == 0) {
-						tarX = startX;
-						tarY = startY;
-					} else if (x == N + 1) {
-						tarX = endX;
-						tarY = endY;
-					} else {
-						tarX = cordinate[x - 1][0];
-						tarY = cordinate[x - 1][1];
-					}
-					
-					double distance = Math.sqrt(Math.pow(nowX - tarX, 2) + Math.pow(nowY - tarY, 2));
-					// 거리가 50m 이상이라면
-					if (distance >= 50) {
-						graph[y][x] = (distance - 50) / 5 + 2;
-					}
-					// 거리가 50m 이하라면
-					else {
-						// 그냥 쌩으로 걸어가기
-						double cal1 = distance / 5;
-						// 대포타고 날아간 뒤 걸어가기
-						double cal2 = (50 - distance) / 5 + 2;
-						graph[y][x] = Math.min(cal1, cal2);
-					}
+					double sX = cordinate[y][0];
+					double sY = cordinate[y][1];
+					double eX = cordinate[x][0];
+					double eY = cordinate[x][1];
+					graph[y][x] = graph[x][y] = Math.sqrt(Math.pow(sX - eX, 2) + Math.pow(sY - eY, 2));
 				}
 			}
-		} // 이중for문 끝
+		}
 		
 		dist[0] = 0;
 		// [nowNode, dist[nowNode]]
@@ -115,25 +63,20 @@ public class _10473 {
 			pq.poll();
 			
 			if (dist[nowNode] < nowCost) continue;
+			if (nowNode == N + 1) break;
 			
-			for (int i = 0; i < N + 2; i++) {
-				if (i == nowNode) continue;
-				int nextNode = i;
-				double nextCost = graph[nowNode][i];
-				
+			for (int nextNode = 0; nextNode < N + 2; nextNode++) {
+				if (nowNode == nextNode) continue;
+				double disBtw = graph[nowNode][nextNode];
+				double nextCost = disBtw / 5;
+				if (nowNode != 0) nextCost = Math.min(nextCost, 2 + (Math.abs(disBtw - 50) / 5));
 				if (dist[nextNode] > dist[nowNode] + nextCost) {
 					dist[nextNode] = dist[nowNode] + nextCost;
 					pq.offer(new double[] { nextNode, dist[nextNode] });
 				}
 			}
 		}
-
-		for (int y = 0; y < N + 2; y++ ) {
-			for (int x = 0; x < N + 2; x++) {
-				System.out.print(graph[y][x] + "\tㅣ\t");
-			}
-			System.out.println();
-		}
+		
 		System.out.println(dist[N + 1]);
 	}
 
