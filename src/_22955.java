@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class _22955 {
+	static boolean isDebug = false;
 	static final int INF = Integer.MAX_VALUE >> 1;
 	static int X, Y;
 	static int startX, startY, endX, endY;
@@ -21,7 +22,7 @@ public class _22955 {
 		X = Integer.parseInt(st.nextToken());
 
 		/*
-		 * -1: 강아지 0 : 고양이, 탈출구 1 : 일반 바닥 2 : 사다리 3 : 아래가 뚫려있는 공간
+		 * -1: 媛뺤븘吏� 0 : 怨좎뼇�씠, �깉異쒓뎄 1 : �씪諛� 諛붾떏 2 : �궗�떎由� 3 : �븘�옒媛� �슟�젮�엳�뒗 怨듦컙
 		 */
 		graph = new int[Y][X];
 		dist = new int[Y][X];
@@ -54,8 +55,8 @@ public class _22955 {
 		// { x, y, dist[y][x], direction }
 		pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1[2], e2[2]));
 		dist[startY][startX] = 0;
-		pq.offer(new int[] { startX, startY, dist[startY][startX], 2 });
-		pq.offer(new int[] { startX, startY, dist[startY][startX], 3 });
+		pq.offer(new int[] { startX, startY, dist[startY][startX], 0 });
+		pq.offer(new int[] { startX, startY, dist[startY][startX], 1 });
 		while (!pq.isEmpty()) {
 			int nowX = pq.peek()[0];
 			int nowY = pq.peek()[1];
@@ -66,141 +67,102 @@ public class _22955 {
 			if (dist[nowY][nowX] < nowCost)
 				continue;
 
+			if (graph[nowY][nowX] == -1 || graph[nowY][nowX] == 3)
+				continue;
+
 			if (nowX == endX && nowY == endY)
 				break;
 
 			move(nowX, nowY, nowCost, nowDirection);
 		}
 
-		for (int y = 0; y < Y; y++) {
-			for (int x = 0; x < X; x++) {
-				int a = dist[y][x];
-				System.out.print((a == INF ? "-" : a) + " ");
+		if (isDebug) {
+			for (int y = 0; y < Y; y++) {
+				for (int x = 0; x < X; x++) {
+					int a = dist[y][x];
+					System.out.print((a == INF ? "-" : a) + "\t");
+				}
+				System.out.println();
 			}
-			System.out.println();
 		}
+
 		int ans = dist[endY][endX];
 		System.out.println(ans == INF ? "dodo sad" : ans);
 	}
 
 	/**
-	 * @param nowDirection : 0123(상하좌우)
+	 * @param nowDirection : 0, 1 (left, right)
 	 */
 	public static void move(int nowX, int nowY, int nowCost, int direction) {
-		// 좌
-		if (direction == 2) {
-			int nextY = nowY;
-			int nextCost = nowCost;
-			for (int nextX = nowX; nextX >= 0; nextX--) {
-				// 강아지를 만났을 경우
-				if (graph[nextY][nextX] == -1)
+		int nextX = direction == 0 ? nowX + 1 : nowX - 1;
+		int nextY = nowY;
+		int nextCost = nowCost;
+
+		while (true) {
+			// go left
+			if (direction == 0) {
+				nextX--;
+				if (nextX < 0)
 					break;
+			}
+			// go right
+			else if (direction == 1) {
+				nextX++;
+				if (nextX >= X)
+					break;
+			}
 
-				if (dist[nextY][nextX] < nextCost + 1)
-					continue;
-				
-				nextCost++;
+			if (graph[nextY][nextX] == -1)
+				break;
 
-				if (dist[nextY][nextX] > nextCost) {
-					dist[nextY][nextX] = nextCost;
-				}
+			// if there's no reason to continue
+			if (dist[nextY][nextX] < nextCost + 1 && graph[nextY][nextX] == 1)
+				continue;
+			
+			if (nowX != nextX) nextCost++;
 
-				if (graph[nextY][nextX] == 1)
-					continue;
-
-				// 사다리1 (고양이 칸에 사다리있음, 위칸으로 이동 가능)
-				if (graph[nextY][nextX] == 2) {
-					if (nextY - 1 < 0)
-						continue;
-
-					if (dist[nextY - 1][nextX] > nextCost + 5) {
-						dist[nextY - 1][nextX] = nextCost + 5;
-						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 3 });
-					}
-					continue;
-				}
-
-				// 사다리2 (고양이 아래칸에 사다리있음, 아래칸으로 이동 가능)
-				if (nextY + 1 < Y && graph[nextY + 1][nextX] == 2) {
-					if (dist[nextY + 1][nextX] > nextCost + 5) {
-						dist[nextY + 1][nextX] = nextCost + 5;
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 3 });
-					}
-					continue;
-				}
-
-				// 뚫려있는 바닥
-				if (graph[nextY][nextX] == 3) {
-					if (nextY + 1 >= Y)
-						return;
-
-					if (dist[nextY + 1][nextX] > nextCost + 10) {
-						dist[nextY + 1][nextX] = nextCost + 10;
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 3 });
-					}
+			// if there's a hole so you go fallen' down
+			if (graph[nextY][nextX] == 3) {
+				int arriveY = nextY;
+				for (; arriveY < Y - 1 && (graph[arriveY][nextX] != 1 && graph[arriveY][nextX] != 2); arriveY++)
+					;
+				// it's not possible arriving
+				if (arriveY == Y - 1 && (graph[arriveY][nextX] != 1 && graph[arriveY][nextX] != 2))
 					return;
+				if (dist[arriveY][nextX] > nextCost + 10) {
+					dist[arriveY][nextX] = nextCost + 10;
+					pq.offer(new int[] { nextX, arriveY, dist[arriveY][nextX], 0 });
+					pq.offer(new int[] { nextX, arriveY, dist[arriveY][nextX], 1 });
+				}
+				return;
+			}
+
+			// if there's a ladder in a downfloor so you can go down
+			if (nextY + 1 < Y && graph[nextY + 1][nextX] == 2) {
+				if (dist[nextY + 1][nextX] > nextCost + 5) {
+					dist[nextY + 1][nextX] = nextCost + 5;
+					pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 0 });
+					pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 1 });
 				}
 			}
-		}
 
-		// 우
-		else if (direction == 3) {
-			int nextY = nowY;
-			int nextCost = nowCost;
-			for (int nextX = nowX; nextX < X; nextX++) {
-				// 강아지를 만났을 경우
-				if (graph[nextY][nextX] == -1)
-					break;
-
-				nextCost++;
-				if (dist[nextY][nextX] < nextCost)
+			// if there's a ladder so you can go up
+			if (graph[nextY][nextX] == 2) {
+				// if there's no room to go
+				if (nextY - 1 < 0)
 					continue;
 
-				if (dist[nextY][nextX] > nextCost) {
-					dist[nextY][nextX] = nextCost;
-				}
-
-				if (graph[nextY][nextX] == 1)
-					continue;
-
-				// 사다리1 (고양이 칸에 사다리있음, 위칸으로 이동 가능)
-				if (graph[nextY][nextX] == 2) {
-					if (nextY - 1 < 0)
-						continue;
-
+				if (graph[nextY - 1][nextX] != 3 && graph[nextY - 1][nextX] != -1) {
 					if (dist[nextY - 1][nextX] > nextCost + 5) {
 						dist[nextY - 1][nextX] = nextCost + 5;
-						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 3 });
+						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 0 });
+						pq.offer(new int[] { nextX, nextY - 1, dist[nextY - 1][nextX], 1 });
 					}
-					continue;
 				}
+			}
 
-				// 사다리2 (고양이 아래칸에 사다리있음, 아래칸으로 이동 가능)
-				if (nextY + 1 < Y && graph[nextY + 1][nextX] == 2) {
-					if (dist[nextY + 1][nextX] > nextCost + 5) {
-						dist[nextY + 1][nextX] = nextCost + 5;
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 3 });
-					}
-					continue;
-				}
-
-				// 뚫려있는 바닥
-				if (graph[nextY][nextX] == 3) {
-					if (nextY + 1 >= Y)
-						return;
-
-					if (dist[nextY + 1][nextX] > nextCost + 10) {
-						dist[nextY + 1][nextX] = nextCost + 10;
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 2 });
-						pq.offer(new int[] { nextX, nextY + 1, dist[nextY + 1][nextX], 3 });
-					}
-					return;
-				}
+			if (dist[nextY][nextX] > nextCost) {
+				dist[nextY][nextX] = nextCost;
 			}
 		}
 	}

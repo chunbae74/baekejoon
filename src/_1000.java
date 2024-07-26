@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 /*
- * 1000 _ from ECLIPSE
+ * 1000
  */
 public class _1000 {
 
