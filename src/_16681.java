@@ -5,32 +5,26 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-/*
- * N: ë…¸ë“œ ê°œìˆ˜
- * M: ê¸¸ ê°œìˆ˜
- * D: ê±°ë¦¬ ë¹„ë¡€ ì²´ë ¥ ì†Œëª¨ëŸ‰
- * E: ë†’ì´ ë¹„ë¡€ ì„±ì·¨ê° íšë“ëŸ‰
- */
-/*
- * ì–»ì€ ì„±ì·¨ê°(E * h)ê°€ í¬ê³ , 
- * ì†Œëª¨í•œ ì²´ë ¥ (1 * D)ê°€ ì‘ì•„ì•¼ í•¨
- */
 class Node_16681 {
 	int index;
-	int cost;
+	long cost;
 	
-	Node_16681(int index, int cost) {
+	Node_16681(int index, long cost) {
 		this.index = index;
 		this.cost = cost;
 	}
 }
 
+/*
+ * ¼ºÃë°¨Àº ³ô°Ô, ¼Ò¸ğÇÑ Ã¼·ÂÀº ³·°Ô
+ * ³ôÀÌ(1<=h<=1_000_000)´Â ³ô°Ô, ÀÌµ¿°Å¸®´Â Àû°Ô 
+ */
 public class _16681 {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		final int INF = Integer.MAX_VALUE;
+		final long INF = Long.MAX_VALUE >> 1;
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
@@ -38,14 +32,15 @@ public class _16681 {
 		int D = Integer.parseInt(st.nextToken());
 		int E = Integer.parseInt(st.nextToken());
 		
-		int[] distOfClimb = new int[N];
 		int[] height = new int[N];
+		long[] distFromHome = new long[N];
+		long[] distFromSchool = new long[N];
 		ArrayList<Node_16681>[] graph = new ArrayList[N];
 		
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
-			distOfClimb[i] = INF;
 			height[i] = Integer.parseInt(st.nextToken());
+			distFromHome[i] = distFromSchool[i] = INF;
 			graph[i] = new ArrayList<>();
 		}
 		
@@ -58,24 +53,70 @@ public class _16681 {
 			graph[B].add(new Node_16681(A, C));
 		}
 		
-		PriorityQueue<int[]> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1[1], e2[1]));
-		distOfClimb[0] = 0;
-		pq.offer(new int[] {0, distOfClimb[0] });
+		PriorityQueue<Node_16681> pq = new PriorityQueue<>((e1, e2) -> Long.compare(e1.cost, e2.cost));
+		distFromHome[0] = 0;
+		pq.offer(new Node_16681(0, distFromHome[0]));
 		
 		while (!pq.isEmpty()) {
-			int nowNode = pq.peek()[0];
-			int nowCost = pq.peek()[1];
+			int nowNode = pq.peek().index;
+			long nowCost = pq.peek().cost;
 			pq.poll();
 			
-			if (distOfClimb[nowNode] < nowCost) continue;
+			if (distFromHome[nowNode] < nowCost) continue;
 			
 			for (Node_16681 next: graph[nowNode]) {
 				int nextNode = next.index;
-				int nextCost;
+				long nextCost = next.cost;
 				
-				if ()
+				// ¸ñÇ¥¿¡ µµ´ŞÇÒ ¶§ ±îÁö´Â Ç×»ó ³ôÀÌ°¡ Áõ°¡ÇÏ´Â ¹æÇâÀ¸·Î¸¸ ÀÌµ¿ÇØ¾ß ÇÑ´Ù.
+				if (height[nowNode] >= height[nextNode]) continue;
+				
+				if (distFromHome[nextNode] > distFromHome[nowNode] + nextCost) {
+					distFromHome[nextNode] = distFromHome[nowNode] + nextCost;
+					pq.offer(new Node_16681(nextNode, distFromHome[nextNode]));
+				}
 			}
 		}
+		
+		pq.clear();
+		distFromSchool[N - 1] = 0;
+		pq.offer(new Node_16681(N - 1, distFromSchool[N - 1]));
+		while (!pq.isEmpty()) {
+			int nowNode = pq.peek().index;
+			long nowCost = pq.peek().cost;
+			pq.poll();
+			
+			if (distFromSchool[nowNode] < nowCost) continue;
+			
+			for (Node_16681 next: graph[nowNode]) {
+				int nextNode = next.index;
+				long nextCost = next.cost;
+				// ¸ñÇ¥¿¡ µµ´ŞÇÒ ¶§ ±îÁö´Â Ç×»ó ³ôÀÌ°¡ °¨¼ÒÇÏ´Â ¹æÇâÀ¸·Î¸¸ ÀÌµ¿ÇØ¾ß ÇÑ´Ù.
+				if (height[nowNode] >= height[nextNode]) continue;
+				
+				if (distFromSchool[nextNode] > distFromSchool[nowNode] + nextCost) {
+					distFromSchool[nextNode] = distFromSchool[nowNode] + nextCost;
+					pq.offer(new Node_16681(nextNode, distFromSchool[nextNode]));
+				}
+			}
+		}
+		
+		
+		long max = -1 * Long.MAX_VALUE;
+		boolean isPossible = false;
+		for (int i = 1; i < N - 1; i++) {
+			if (distFromHome[i] == INF || distFromSchool[i] == INF) continue;
+			long totalDistance = distFromHome[i] + distFromSchool[i];
+			int h = height[i];
+			long cal = (h * E) - (totalDistance * D);
+			
+			if (max < cal) {
+				max = cal;
+				isPossible = true;
+			}
+		}
+		
+		System.out.println(isPossible ? max : "Impossible");
 	}
 
 }
