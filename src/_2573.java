@@ -16,12 +16,11 @@ public class _2573 {
 	static boolean isDebug = false;
 	static int X, Y;
 	static int[][] map;
-	static int[][] map2;
 	static boolean[][] visited;
 	static Queue<int[]> queue = new LinkedList<>();
 	
-	static int[] dx = { 0, 0, 1, -1 };
-	static int[] dy = { 1, -1, 0, 0 };
+	static final int[] dx = { 0, 0, 1, -1 };
+	static final int[] dy = { 1, -1, 0, 0 };
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -35,20 +34,21 @@ public class _2573 {
 			st = new StringTokenizer(br.readLine());
 			for (int x = 0; x < X; x++) {
 				map[y][x] = Integer.parseInt(st.nextToken());
-				if (map[y][x] > 0) {
-					queue.offer(new int[] { x, y, map[y][x] });
+				// 바다이면은 queue에 저장
+				if (map[y][x] == 0) {
+					queue.offer(new int[] { x, y });
+				} else if (map[y][x] > 0) {
 				}
 			}
 		}
 		
 		int day = 0;
+		int count = 0;
 		while (true) {
-			map2 = new int[Y][X];
 			dayPassed();
-			map = map2;
 			day ++;
 			
-			int count = 0;
+			count = 0;
 			visited = new boolean[Y][X];
 			for (int y = 0; y < Y; y++) {
 				for (int x = 0; x < X; x++) {
@@ -78,57 +78,46 @@ public class _2573 {
 			
 			// 두 덩어리 이상으로 분리되었다면
 			if (count >= 2) {
-				bw.write(day + "");
-				break;
+				System.out.println(day);
+				System.exit(0);
 			}
 			// 한 덩어리 혹은 다 녹아버렸다면
 			else {
 				// 빙산이 다 녹아버림
 				if (count == 0) {
-					bw.write(0 + "");
-					break;
+					System.out.println(0);
+					System.exit(0);
 				}			
 				else continue;
 			}
 			
 		}
-		bw.flush();
-		bw.close();
 	}
 	
 	public static void dayPassed() {
-		// 삭제될 빙산들
-		Queue<int[]> removed = new LinkedList<>();
-		
 		for (int[] arr: queue) {
 			int nowX = arr[0];
 			int nowY = arr[1];
-
-			// 주변 바닷물 개수
-			int count = 0;
+			queue.poll();
+			
+			boolean isAround = false;
 			for (int i = 0; i < 4; i++) {
 				int nextX = nowX + dx[i];
 				int nextY = nowY + dy[i];
 				
 				if (nextX < 0 || nextY < 0 || nextX >= X || nextY >= Y) continue;
-				if (map[nextY][nextX] > 0) continue;
-				
-				count ++;
+				if (map[nextY][nextX] > 0) {
+					isAround = true;
+					map[nextY][nextX] --;
+				}
 			}
 			
-			// map2에 최신 빙산정보 기록
-			map2[nowY][nowX] = map[nowY][nowX] - count;
-			
-			// 빙산이 다 녹아버렸다면
-			if (map2[nowY][nowX] < 1) {
-				map2[nowY][nowX] = 0;
-				// 빙산 remove 리스트에 추가
-				removed.offer(new int[] { nowX , nowY });
+			if (!isAround) {
+				continue;
+			} else {
+				queue.offer(new int[] { nowX, nowY });
 			}
 		}
-		
-		// 빙산 remove리스트에 추가된 빙산들 삭제
-		queue.removeAll(removed);
 	}
 	
 	
