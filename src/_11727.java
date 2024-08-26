@@ -1,42 +1,30 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
 
 public class _11727 {
-	static Long[] dp;
-	static int a = 10_007;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
+		final int mod = 10_007;
+
 		int n = Integer.parseInt(br.readLine());
-		dp = new Long[n + 1];
+		br.close();
 		
-		dp[0] = 0L;
-		dp[1] = 1L;
-		if (n > 1) {
-			dp[2] = 3L;
+		int[] dp = new int[n + 1];
+		
+		dp[1] = 1;
+		
+		for (int i = 2; i <= n; i++) {
+			if (i % 2 == 0) {
+				dp[i] = ((dp[i - 1] << 1 % mod) + 1) % mod;
+			} else {
+				dp[i] = ((dp[i - 1] << 1 % mod) - 1) % mod;
+			}
 		}
 		
-		recur(n);
-		
-		System.out.println(Arrays.toString(dp));
-		
-		bw.write(dp[n] % a + "");
-		bw.flush();
-		bw.close();
-		br.close();
+		System.out.println(dp[n]);
 	}
 	
-	public static long recur(int n) {
-		if (dp[n] == null) {
-			// dp[n] = Math.max();
-		}
-		
-		return dp[n];
-	}
 }
