@@ -6,32 +6,34 @@ public class _1788 {
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		final int A = 1_000_000;
-		int N = Integer.parseInt(br.readLine()) + A;
-		Integer[] dp = new Integer[A << 1 + 1];
-		dp[A] = 0;
-		dp[A + 1] = 1;
+		final int max = 1_000_000;
+		final int mod = 1_000_000_000;
 		
-		if (N >= A) {
-			for (int i = A + 2; i <= N; i++) {
-				dp[i] = dp[i - 1] + dp[i - 2];
-			}
-		} else {
-			for (int i = A + 1; i - 2 >= N; i--) {
-				dp[i - 2] = dp[i] - dp[i - 1];
-			}
+		int N = Integer.parseInt(br.readLine());
+		br.close();
+		Long[] dp = new Long[max + 1];
+		dp[0] = 0L;
+		dp[1] = 1L;
+		for (int i = 2; i <= max; i++) {
+			dp[i] = ((dp[i - 1] % mod) + (dp[i - 2] % mod)) % mod;
+			
 		}
 		
-		int ans = dp[N];
-		if (ans > 0) {
-			System.out.println(1);
-		} else if (ans == 0) {
+		if (N == 0) {
 			System.out.println(0);
+		} else if (N > 0) {
+			System.out.println(1);
 		} else {
-			System.out.println(-1);
+			N = N * -1;
+			if (N % 2 == 0) {
+				System.out.println(-1);
+			}
+			else {
+				System.out.println(1);
+			}
 		}
 		
-		System.out.println(Math.abs(dp[N]) % 1_000_000_000);
+		System.out.println(dp[N]);
 	}
 
 }
