@@ -22,7 +22,7 @@ public class _11048 {
 			for (int x = 0; x < X; x++) {
 				graph[y][x] = Integer.parseInt(st.nextToken());
 			}
-		}
+		} 
 
 		dp[0][0] = graph[0][0];
 		for (int y = 0; y < Y; y++) {
